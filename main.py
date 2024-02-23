@@ -1,33 +1,12 @@
-import speech_recognition as sr
-import pyttsx3
 import app
-
-r = sr.Recognizer()
-engine = pyttsx3.init()
-
-def listen():
-    with sr.Microphone() as source:
-        print("Listening...")
-        r.adjust_for_ambient_noise(source)
-        audio = r.listen(source)
-        try:
-            query = r.recognize_google(audio, language="en-in")
-            print(f"You said {query}")
-            return query.lower()
-        except sr.UnknownValueError:
-            print("Sorry, I didn't catch that")
-            return ""
-
-def speak(text):
-    engine.say(text)
-    engine.runAndWait()
+import data
 
 def main():
-    speak("Hello, I am FRIDAY, your Python-Powered AI Assistant")
+    data.speak("Hello, I am FRIDAY, your Python-Powered AI Assistant")
     while True:
-        command = listen()
+        command = data.inputType()
         if "hello" in command:
-            speak("Hi! How can I help you?")
+            data.speak("Hi! How can I help you?")
         elif command.startswith("open website"):
             parts = command.split(" ", 2)
             if len(parts) == 3:
@@ -44,13 +23,26 @@ def main():
             if len(part) == 3:
                 app_name = part[2]
                 app.open_app(app_name)
-                speak(f"{app_name} opened successfully.")
+                data.speak(f"{app_name} opened successfully.")
             break
-        elif "thank you" in command:
-            speak("Happy to help! Have a great day!")
+        elif "tell me the time".lower() in command.lower():
+            time,_ = app.date_time()
+            data.speak(f"the current time is {time}")
+            break
+        elif "tell me the date".lower() in command.lower():
+            _, date = app.date_time()
+            data.speak(f"the current date is {date}")
+            break
+        elif "calculate".lower() in command.lower():
+            ex = command.split("calculate",1)[1].strip()
+            result = app.calc(ex)
+            data.speak(f"The result is: {result}")
+            break
+        elif "break" in command:
+            data.speak("Happy to help! Have a great day!")
             break
         else:
-            speak("I'm sorry, I didn't understand that.")
+            data.speak("I'm sorry, I didn't understand that.")
 
 if __name__ == "__main__": 
     print("Hello Riya!! :D")
