@@ -3,8 +3,9 @@ import data
 
 def main():
     data.speak("Hello, I am FRIDAY, your Python-Powered AI Assistant")
+    choice = data.inputType()
     while True:
-        command = data.inputType()
+        command = choice()
         if "hello" in command:
             data.speak("Hi! How can I help you?")
         elif command.startswith("open website"):
@@ -37,6 +38,16 @@ def main():
             ex = command.split("calculate",1)[1].strip()
             result = app.calc(ex)
             data.speak(f"The result is: {result}")
+            break
+        elif "weather".lower() in command.lower():
+            parts = command.split("weather", 1)
+            if len(parts) > 1:
+                city_parts = parts[1].strip()
+                city = city_parts.split()
+                city = city[1]
+            result = app.weather(city)
+            data.speak(result)
+            print(result)
             break
         elif "break" in command:
             data.speak("Happy to help! Have a great day!")

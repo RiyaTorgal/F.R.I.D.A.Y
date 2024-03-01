@@ -8,7 +8,7 @@ def inputType():
     choice = input("choose input method (speak or type): ").lower()
     if choice == "speak":
         speak("Now listening")
-        return listen()
+        return listen
     elif choice == "type":
         return input("Enter your command: ").lower()
     else:
@@ -32,3 +32,4 @@ def listen():
 def speak(text):
     engine.say(text)
     engine.runAndWait()
+
