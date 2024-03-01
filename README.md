@@ -15,4 +15,14 @@
   <li>Tells Current time (e.g Friday tell me the time)</li>
   <li>Tells Current date (e.g Friday tell me the date)</li>
   <li>Performs Basic calculations (e.g Friday calculate 2 + 2)</li>
+  <li>Tells Current weather of the city mentioned (e.g Friday tell me the weather of Pune)</li>
 </ul>
+<!-- <h3>Assistant Features</h3>
+<ul>
+  <li>Supports two different user input modes (text or speech), user can write or speek in the mic.</li>
+  <li>Vocal or/and text response</li>
+  <li></li>
+  <li></li>
+  <li></li>
+  <li></li>
+</ul> -->
