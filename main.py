@@ -1,66 +1,3 @@
-# import app
-# import data
-
-# def main():
-#     data.speak("Hello, I am FRIDAY, your Python-Powered AI Assistant")
-#     choice = data.inputType()
-#     while True:
-#         command = choice()
-#         if "hello" in command:
-#             data.speak("Hi! How can I help you?")
-#         elif command.startswith("open website"):
-#             parts = command.split(" ", 2)
-#             if len(parts) == 3:
-#                 website = parts[2]
-#                 url = f"https://{website}"
-#                 try:
-#                     app.open_website(url)
-#                     print(f"Opening website: {url}")
-#                 except Exception as e:
-#                     print(f"Error opening website: {e}")
-#             break
-#         elif command.startswith("open app"):
-#             part = command.split(" ",2)
-#             if len(part) == 3:
-#                 app_name = part[2]
-#                 app.open_app(app_name)
-#                 data.speak(f"{app_name} opened successfully.")
-#             break
-#         elif "tell me the time".lower() in command.lower():
-#             time,_ = app.date_time()
-#             data.speak(f"the current time is {time}")
-#             break
-#         elif "tell me the date".lower() in command.lower():
-#             _, date = app.date_time()
-#             data.speak(f"the current date is {date}")
-#             break
-#         elif "calculate".lower() in command.lower():
-#             ex = command.split("calculate",1)[1].strip()
-#             result = app.calc(ex)
-#             data.speak(f"The result is: {result}")
-#             break
-#         elif "weather".lower() in command.lower():
-#             parts = command.split("weather", 1)
-#             if len(parts) > 1:
-#                 city_parts = parts[1].strip()
-#                 city = city_parts.split()
-#                 city = city[1]
-#             result = app.weather(city)
-#             data.speak(result)
-#             print(result)
-#             break
-#         elif "break" in command:
-#             data.speak("Happy to help! Have a great day!")
-#             break
-#         else:
-#             data.speak("I'm sorry, I didn't understand that.")
-
-# if __name__ == "__main__": 
-#     print("Hello Riya!! :D")
-#     main()
-
-
-# main.py
 from typing import Optional
 import app
 import data
@@ -71,6 +8,7 @@ import re
 class FridayAssistant:
     def __init__(self):
         self.assistant = app.Assistant()
+        self.typeHandler = data.TypedInputHandler()
         self.voice = data.VoiceAssistant()
         self.commands = {
             "time": self._handle_time,
@@ -79,8 +17,35 @@ class FridayAssistant:
             "weather": self._handle_weather,
             "open": self._handle_open,
             "exit": self._handle_exit,
+            "thanks": self._handle_thanks,
+            "help": self._handle_help,
         }
         self.setup_signal_handlers()
+
+    def _display_welcome(self):
+        """Display welcome ASCII art and message"""
+        print("\n")
+        print("███████████ ███████████  ███████████████    █████████  █████ █████")
+        print("░███░░░░░░█░░███░░░░░███░░███░░███░░░░███  ███░░░░░███░░███ ░░███") 
+        print("░███   █ ░  ░███    ░███ ░███ ░███   ░░███░███    ░███ ░░███ ███")  
+        print("░███████    ░██████████  ░███ ░███    ░███░███████████  ░░█████")   
+        print("░███░░░█    ░███░░░░░███ ░███ ░███    ░███░███░░░░░███   ░░███")    
+        print("░███  ░     ░███    ░███ ░███ ░███    ███ ░███    ░███    ░███")    
+        print("█████       █████   ████████████████████  █████   █████   █████")   
+        print("░░░░░       ░░░░░   ░░░░░░░░░░░░░░░░░░░░  ░░░░░   ░░░░░   ░░░░░")
+        print("\n")
+        print("="*50)
+        print("Welcome to FRIDAY - Your Python-Powered AI Assistant!")
+        print("Remember to start your commands with 'Friday'")
+        print("For example: 'Friday tell me the time'")
+        print("Type 'Friday help' for a list of available commands")
+        print("="*50)
+        print("\n")
+
+    def _handle_help(self, _: str) -> str:
+        """Handle the help command"""
+        """Return The _show_help function from data.py"""
+        return self.typeHandler._show_help()
 
     def setup_signal_handlers(self):
         """Setup handlers for graceful shutdown"""
@@ -158,8 +123,11 @@ class FridayAssistant:
         except app.WeatherAPIError as e:
             return str(e)
 
+    def _handle_thanks(self, _: str) -> str:
+        return "Happy to help! Have a great day! Come back to me if you have any doubts"
+    
     def _handle_exit(self, _: str) -> str:
-        return "Happy to help! Have a great day!"
+        sys.exit(0)
 
     def process_command(self, command: str) -> Optional[str]:
         """Process user commands and return appropriate response"""
@@ -168,9 +136,16 @@ class FridayAssistant:
             
         command = command.lower().strip()
         
+        # Handle help command explicitly
+        if "help" in command:
+            return self._handle_help(command)
+            
         # Handle exit commands
         if command in ['exit', 'quit', 'bye']:
             return self._handle_exit(command)
+            
+        if any(word in command for word in ['thanks', 'thank you']):
+            return self._handle_thanks(command)
             
         # Match command to handler
         for cmd_key, handler in self.commands.items():
@@ -182,22 +157,7 @@ class FridayAssistant:
 
     def run(self):
         """Main loop for the assistant"""
-        # print("\n" + "="*50)
-        # print("Welcome to FRIDAY - Your Python-Powered AI Assistant")
-        # print("="*50 + "\n")
-        print("")
-        print("███████████ ███████████  ███████████████    █████████  █████ █████")
-        print("░███░░░░░░█░░███░░░░░███░░███░░███░░░░███  ███░░░░░███░░███ ░░███") 
-        print("░███   █ ░  ░███    ░███ ░███ ░███   ░░███░███    ░███ ░░███ ███")  
-        print("░███████    ░██████████  ░███ ░███    ░███░███████████  ░░█████")   
-        print("░███░░░█    ░███░░░░░███ ░███ ░███    ░███░███░░░░░███   ░░███")    
-        print("░███  ░     ░███    ░███ ░███ ░███    ███ ░███    ░███    ░███")    
-        print("█████       █████   ████████████████████  █████   █████   █████")   
-        print("░░░░░       ░░░░░   ░░░░░░░░░░░░░░░░░░░░  ░░░░░   ░░░░░   ░░░░░")
-        print("")
-        print("Remember to start your commands with 'Friday'")
-        print("For example: 'Friday tell me the time'")
-        
+        self._display_welcome()  # Display ASCII art and welcome message
         self.voice.speak("Hello, I am FRIDAY, your Python-Powered AI Assistant")
         input_method = self.voice.get_input_method()
         

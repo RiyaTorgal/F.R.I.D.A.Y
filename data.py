@@ -1,39 +1,3 @@
-# import speech_recognition as sr
-# import pyttsx3
-
-# r = sr.Recognizer()
-# engine = pyttsx3.init()
-
-# def inputType():
-#     choice = input("choose input method (speak or type): ").lower()
-#     if choice == "speak":
-#         speak("Now listening")
-#         return listen
-#     elif choice == "type":
-#         return input("Enter your command: ").lower()
-#     else:
-#         print("Invalid choice")
-#         return input()
-
-
-# def listen():
-#     with sr.Microphone() as source:
-#         print("Listening...")
-#         r.adjust_for_ambient_noise(source)
-#         audio = r.listen(source)
-#         try:
-#             query = r.recognize_google(audio, language="en-in")
-#             print(f"You said {query}")
-#             return query.lower()
-#         except sr.UnknownValueError:
-#             print("Sorry, I didn't catch that")
-#             return ""
-
-# def speak(text):
-#     engine.say(text)
-#     engine.runAndWait()
-
-# data.py
 import speech_recognition as sr
 import pyttsx3
 from typing import Callable, Optional, Union
@@ -130,6 +94,12 @@ Additional Commands:
 - clear   : Clears the screen
 - history : Shows command history
 - exit    : Exits the assistant
+
+Tips:
+----
+- Always start your commands with 'Friday'
+- Speak clearly and naturally when using voice commands
+- Type commands in a clear format when using text input
 """
 
     def _clear_screen(self) -> str:
