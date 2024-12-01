@@ -40,7 +40,7 @@ F.R.I.D.A.Y uses third-party APIs for speech recognition, web searches, weather 
    ```bash
    https://github.com/RiyaTorgal/F.R.I.D.A.Y.git
    ```
-2. **Download the GitHub repository locally**  
+2. **Change the directory**  
 
    ```bash
    cd .\F.R.I.D.A.Y\
