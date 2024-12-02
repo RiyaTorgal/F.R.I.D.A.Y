@@ -20,6 +20,7 @@
 - Performs Basic calculations (e.g., `Friday calculate 2 + 2`)
 - Tells Current weather of a city (e.g., `Friday tell me the weather of Pune`)
 - Help command prints all skills with descriptions (e.g., `Friday help`)
+- Tells what functions it can perform (e.g., `Friday functions`)
 
 ## Assistant Features
 
