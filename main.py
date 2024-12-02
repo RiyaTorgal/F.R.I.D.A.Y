@@ -19,6 +19,7 @@ class FridayAssistant:
             "exit": self._handle_exit,
             "thanks": self._handle_thanks,
             "help": self._handle_help,
+            "functions": self._handle_function_list,
         }
         self.setup_signal_handlers()
 
@@ -46,6 +47,10 @@ class FridayAssistant:
         """Handle the help command"""
         """Return The _show_help function from data.py"""
         return self.typeHandler._show_help()
+    
+    def _handle_function_list(self, _: str) -> str:
+        """Display functionalities of the assistant"""
+        return self.typeHandler.display_functions()
 
     def setup_signal_handlers(self):
         """Setup handlers for graceful shutdown"""

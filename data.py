@@ -102,6 +102,31 @@ Tips:
 - Type commands in a clear format when using text input
 """
 
+    def display_functions(self) -> dict:
+        """Returns log of what fuction the assistant can perform till date"""
+        return"""
+Different function I can perform till date:
+-------------------------------------------
+1. Tell you current Date and/or Time
+description: "Get current time",
+example: "Friday tell me the time"
+-------------------------------------------
+2. Tell you the currect weather
+description: "Get weather for a specific city",
+example: "Friday tell me the weather of Pune",
+params: ["city name"]
+-------------------------------------------
+3. Calculate any mathematical expression
+description: "Perform mathematical calculations",
+example: "Friday calculate 2 + 2",
+supports: ["addition", "subtraction", "multiplication", "division"]
+-------------------------------------------
+4. I can open any desktop app or website on internet
+"description": "Open websites or applications",
+examples: "Friday open youtube.com" or "Friday open notepad"
+-------------------------------------------
+"""
+
     def _clear_screen(self) -> str:
         import os
         os.system('cls' if os.name == 'nt' else 'clear')
