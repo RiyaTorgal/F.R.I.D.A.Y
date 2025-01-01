@@ -1,0 +1,35 @@
+File/Folder structure of the project:
+
+    friday/
+    │
+    ├── src/
+    │   ├── __init__.py
+    │   ├── core/
+    │   │   ├── __init__.py
+    │   │   ├── assistant.py        # Main assistant logic
+    │   │   ├── weather.py          # Weather-related functionality
+    │   │   └── exceptions.py       # Custom exception classes
+    │   │
+    │   ├── input/
+    │   │   ├── __init__.py
+    │   │   ├── voice_handler.py    # Voice input handling
+    │   │   └── text_handler.py     # Text input handling
+    |   |
+    |   ├── sevices/
+    │   │   ├── __init__.py
+    │   │   └── notes.py            # Notes creation handling
+    │   │
+    │   └── utils/
+    │       ├── __init__.py
+    │       └── input_history.py    # Input history tracking
+    │
+    ├── main.py
+    ├── config/
+    │   ├── .env
+    │   ├── .env.example            # Environment variables
+    |   └── file_structure.txt
+    │
+    ├── requirements.txt
+    ├── README.md
+    ├── .gitignore
+    └── LICENSE        

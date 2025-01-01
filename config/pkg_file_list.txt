@@ -1,4 +1,0 @@
-app.py
-data.py
-main.py
-requirements.txt

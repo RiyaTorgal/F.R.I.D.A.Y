@@ -1,15 +1,26 @@
 from typing import Optional
-import app
-import data
 import signal
 import sys
 import re
+import os
+from pathlib import Path
+from dotenv import load_dotenv
+from src.core.exceptions import AppOperationError, AssistantError, WeatherAPIError
+from src.core.assistant import Assistant
+from src.input.text_handler import TypedInputHandler
+from src.input.voice_handler import VoiceAssistant
+from src.core.weather import WeatherAPI
+
+dotenv_path = os.path.join(os.path.dirname(__file__), 'config', '.env')
+load_dotenv(dotenv_path)
 
 class FridayAssistant:
     def __init__(self):
-        self.assistant = app.Assistant()
-        self.typeHandler = data.TypedInputHandler()
-        self.voice = data.VoiceAssistant()
+        self.api_key = os.environ.get("API_KEY")
+        self.assistant = Assistant()
+        self.typeHandler = TypedInputHandler()
+        self.voice = VoiceAssistant()
+        self.weather = WeatherAPI(self.api_key)
         self.commands = {
             "time": self._handle_time,
             "date": self._handle_date,
@@ -84,14 +95,14 @@ class FridayAssistant:
             try:
                 self.assistant.open_website(target)
                 return f"Opening website: {target}"
-            except app.AppOperationError as e:
+            except AppOperationError as e:
                 return str(e)
         else:
             # Assume it's an application
             try:
                 self.assistant.open_app(target)
                 return f"Opening {target}"
-            except app.AppOperationError as e:
+            except AppOperationError as e:
                 return str(e)
 
     def _handle_time(self, _: str) -> str:
@@ -123,9 +134,9 @@ class FridayAssistant:
         
         city = match.group(1).strip()
         try:
-            weather_data = self.assistant.get_weather(city)
+            weather_data = self.weather.get_weather(city)
             return str(weather_data)
-        except app.WeatherAPIError as e:
+        except WeatherAPIError as e:
             return str(e)
 
     def _handle_thanks(self, _: str) -> str:
@@ -159,12 +170,30 @@ class FridayAssistant:
         
         return ("I'm sorry, I didn't understand that command. "
                 "Please say 'help' to see available commands.")
+    
+    def choose_input_method(self):
+        """Allow the user to select input method: text or speak."""
+        while True:
+            print("\nChoose Input Method:")
+            print("1. Type commands using the keyboard")
+            print("2. Speak commands using the microphone")
+            
+            choice = input("\nSelect input method (type/speak): ").lower().strip()
+            
+            if choice == "type":
+                return self.typeHandler.get_input
+            elif choice == "speak":
+                return self.voice.listen
+            else:
+                print("Invalid choice. Please select either 'type' or 'speak'.")
 
     def run(self):
         """Main loop for the assistant"""
         self._display_welcome()  # Display ASCII art and welcome message
         self.voice.speak("Hello, I am FRIDAY, your Python-Powered AI Assistant")
-        input_method = self.voice.get_input_method()
+        # input_method = self.voice.get_input_method()
+        # input_method = self.typeHandler.get_input
+        input_method = self.choose_input_method()
         
         while True:
             try:

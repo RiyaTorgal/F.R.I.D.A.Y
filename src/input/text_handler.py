@@ -1,10 +1,6 @@
-import speech_recognition as sr
-import pyttsx3
-from typing import Callable, Optional, Union
-from enum import Enum
+from typing import List, Optional
 from dataclasses import dataclass
-from typing import List
-import re
+from enum import Enum
 
 class InputMethod(Enum):
     SPEAK = "speak"
@@ -175,70 +171,3 @@ examples: "Friday open youtube.com" or "Friday open notepad"
             return "exit"
         except EOFError:
             return "exit"
-
-class VoiceAssistant:
-    def __init__(self):
-        self.recognizer = sr.Recognizer()
-        self.engine = pyttsx3.init()
-        self.typed_handler = TypedInputHandler()
-        self.history = InputHistory()
-        self.parser = CommandParser()
-        
-    def get_input_method(self) -> Callable:
-        """Get user's preferred input method"""
-        while True:
-            print("\nAvailable input methods:")
-            print("1. type - Type commands using keyboard")
-            print("2. speak - Use voice commands")
-            
-            choice = input("\nChoose input method (type/speak): ").lower().strip()
-            
-            if choice == InputMethod.SPEAK.value:
-                self.speak("Now listening. Remember to start your command with 'Friday'")
-                return self.listen
-            elif choice == InputMethod.TYPE.value:
-                print(self.typed_handler._show_help())
-                return self.typed_handler.get_input
-            
-            print("Invalid choice. Please choose 'speak' or 'type'")
-
-    def listen(self) -> str:
-        """Listen for voice input with improved error handling"""
-        with sr.Microphone() as source:
-            print("Listening...")
-            self.recognizer.adjust_for_ambient_noise(source)
-            try:
-                audio = self.recognizer.listen(source, timeout=5)
-                query = self.recognizer.recognize_google(audio, language="en-in")
-                print(f"You said: {query}")
-                
-                # Check if command starts with "Friday"
-                is_valid, command = self.parser.parse_command(query)
-                if not is_valid:
-                    self.speak("Please start your command with 'Friday'")
-                    return ""
-                
-                # Normalize command
-                normalized_command = self.parser.normalize_command(command)
-                
-                # Add to history
-                self.history.add(Command(
-                    text=query,
-                    timestamp=__import__('time').time(),
-                    source=InputMethod.SPEAK
-                ))
-                
-                return normalized_command
-                
-            except sr.UnknownValueError:
-                return "Could not understand audio"
-            except sr.RequestError as e:
-                return f"Error with speech recognition service: {e}"
-            except Exception as e:
-                return f"An error occurred: {e}"
-
-    def speak(self, text: str) -> None:
-        """Text-to-speech output"""
-        print(f"Assistant: {text}")
-        self.engine.say(text)
-        self.engine.runAndWait()
